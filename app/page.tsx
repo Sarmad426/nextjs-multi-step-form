@@ -107,7 +107,12 @@ const Home: React.FC = () => {
     <main className="flex flex-col gap-12 items-center justify-center mt-16">
       {/* Progress bar */}
 
-      <input type="range" value={setProgress()} readOnly />
+      <input
+        type="range"
+        value={setProgress()}
+        readOnly
+        placeholder="Form Progress"
+      />
 
       {/* Name */}
       {!step && (
@@ -200,6 +205,7 @@ const Home: React.FC = () => {
             onSelect={handleInputData}
             className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
             onChange={(e) => handleGender(e)}
+            title="Gender"
           >
             <option value="" className="bg-gray-900">
               Select Gender
