@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 
 const Home: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
+  const [password2, setPassword2] = useState<string>("");
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -108,13 +109,17 @@ const Home: React.FC = () => {
             type="password"
             placeholder="Create a password..."
             className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
           <input
             type="password"
             placeholder="Confirm new password..."
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            className={`p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem] outline-none ${
+              inputValue === password2 ? "border-green-500" : "border-red-500"
+            }`}
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
           />
           <button
             onClick={handleInputData}
