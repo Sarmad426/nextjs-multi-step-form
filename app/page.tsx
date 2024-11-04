@@ -1,15 +1,18 @@
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const User = {
     name: "",
     age: 0,
     email: "",
+    gender: "",
     password: "",
   };
+
+  // const steps = ["age", "email", "gender", "password"];
 
   const [userData, setUserData] = useState(User);
 
@@ -19,8 +22,6 @@ const Home: React.FC = () => {
       setUserData(JSON.parse(values));
     }
   }, []);
-
-  console.log("User data", userData);
 
   const [password2, setPassword2] = useState<string>("");
 
@@ -65,8 +66,14 @@ const Home: React.FC = () => {
         const user = JSON.parse(userString);
         user.email = userData.email;
         localStorage.setItem("data", JSON.stringify(user));
-        router.push(pathname + "?" + createQueryString("step", "password"));
+        router.push(pathname + "?" + createQueryString("step", "gender"));
       }
+      // if (step === "gender") {
+      //   const user = JSON.parse(userString);
+      //   user.gender = userData.gender;
+      //   localStorage.setItem("data", JSON.stringify(user));
+      //   router.push(pathname + "?" + createQueryString("step", "password"));
+      // }
       // Setting the password value
       if (step === "password") {
         const user = JSON.parse(userString);
@@ -76,8 +83,32 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleGender = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (step === "gender") {
+      const userString = localStorage.getItem("data");
+      if (userString) {
+        const user = JSON.parse(userString);
+        user.gender = e.target?.value;
+        localStorage.setItem("data", JSON.stringify(user));
+        router.push(pathname + "?" + createQueryString("step", "password"));
+      }
+    }
+  };
+
+  const setProgress = () => {
+    if (!step) return 0;
+    else if (step === "age") return 25;
+    else if (step === "email") return 50;
+    else if (step === "gender") return 75;
+    return 100;
+  };
+
   return (
-    <main className="flex items-center justify-center mt-16">
+    <main className="flex flex-col gap-12 items-center justify-center mt-16">
+      {/* Progress bar */}
+
+      <input type="range" value={setProgress()} readOnly />
+
       {/* Name */}
       {!step && (
         <div className="flex flex-col items-center justify-center gap-6">
@@ -159,6 +190,34 @@ const Home: React.FC = () => {
                 Continue
               </button>
             )}
+          </div>
+        </div>
+      )}
+      {/* Gender */}
+      {step === "gender" && (
+        <div className="flex flex-col items-center justify-center gap-6">
+          <select
+            onSelect={handleInputData}
+            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            onChange={(e) => handleGender(e)}
+          >
+            <option value="" className="bg-gray-900">
+              Select Gender
+            </option>
+            <option value="Male" className="bg-gray-900">
+              Male
+            </option>
+            <option value="Female" className="bg-gray-900">
+              Female
+            </option>
+          </select>
+          <div className="flex gap-6">
+            <button
+              className="bg-white text-black rounded-md px-2 py-1 cursor-pointer text-sm"
+              onClick={() => router.back()}
+            >
+              Back
+            </button>
           </div>
         </div>
       )}
