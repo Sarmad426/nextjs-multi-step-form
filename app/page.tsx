@@ -84,14 +84,13 @@ const Home: React.FC = () => {
   };
 
   const handleGender = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (step === "gender") {
-      const userString = localStorage.getItem("data");
-      if (userString) {
-        const user = JSON.parse(userString);
-        user.gender = e.target?.value;
-        localStorage.setItem("data", JSON.stringify(user));
-        router.push(pathname + "?" + createQueryString("step", "password"));
-      }
+    const userString = localStorage.getItem("data");
+    if (userString) {
+      const user = JSON.parse(userString);
+      setUserData({ ...userData, gender: e.target.value });
+      user.gender = e.target?.value;
+      localStorage.setItem("data", JSON.stringify(user));
+      router.push(pathname + "?" + createQueryString("step", "password"));
     }
   };
 
@@ -202,10 +201,10 @@ const Home: React.FC = () => {
       {step === "gender" && (
         <div className="flex flex-col items-center justify-center gap-6">
           <select
-            onSelect={handleInputData}
             className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
             onChange={(e) => handleGender(e)}
             title="Gender"
+            value={userData.gender}
           >
             <option value="" className="bg-gray-900">
               Select Gender
