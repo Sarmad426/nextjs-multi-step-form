@@ -6,7 +6,6 @@ import { getAuth } from 'firebase/auth';
 
 import { getAnalytics } from "firebase/analytics";
 
-console.log("API key: ", process.env?.NEXT_PUBLIC_FIREBASE_API_KEY)
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -21,7 +20,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 const auth = getAuth(app);
 const analytics = getAnalytics(app);
