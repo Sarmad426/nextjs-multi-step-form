@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import { FirebaseError } from "firebase/app";
-import { AuthContext } from "@/components/context/AuthContext";
+import { useAuth } from "@/components/context/AuthContext";
 
 function Login() {
-  const context = useContext(AuthContext);
+  const { user, logOut } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,15 @@ function Login() {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      {context?.user?.email}
+      {user?.email}
+      {user && (
+        <button
+          onClick={() => logOut()}
+          className="bg-white text-black rounded-md p-2 cursor-pointer"
+        >
+          Logout
+        </button>
+      )}
       <h2 className="my-12 lg:text-4xl md:text-3xl text-2xl font-semibold">
         Login
       </h2>

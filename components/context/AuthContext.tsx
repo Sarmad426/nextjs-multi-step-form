@@ -16,16 +16,18 @@ interface AuthContextType {
   logOut: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  console.log("🚀 ~ AuthProvider ~ user:", user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) setUser(user);
+      else setUser(null);
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -56,11 +58,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, signIn, logOut }}>
-      {children}
+      {loading ? <h1>Loading...</h1> : children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  return useContext(AuthContext) as AuthContextType;
 }
