@@ -3,15 +3,16 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebaseConfig"; // import initialized Firebase auth
+import { FirebaseError } from "firebase/app";
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [userEmail, setUserEmail] = useState(null); // State to store user email
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null); // State to store user email
 
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -25,7 +26,8 @@ function SignUp() {
       setSuccess("User registered successfully!");
       setUserEmail(userCredential.user.email); // Set the email of the signed-up user
     } catch (error) {
-      setError(error.message);
+      if (error instanceof FirebaseError)
+        setError(error.message || "Something went wrong");
     }
   };
 
