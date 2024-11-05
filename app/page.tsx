@@ -1,19 +1,10 @@
 "use client";
 
+import { setProgress, User } from "@/utils/helper-methods";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 const Home: React.FC = () => {
-  const User = {
-    name: "",
-    age: 0,
-    email: "",
-    gender: "",
-    password: "",
-  };
-
-  // const steps = ["age", "email", "gender", "password"];
-
   const [userData, setUserData] = useState(User);
 
   useEffect(() => {
@@ -68,12 +59,7 @@ const Home: React.FC = () => {
         localStorage.setItem("data", JSON.stringify(user));
         router.push(pathname + "?" + createQueryString("step", "gender"));
       }
-      // if (step === "gender") {
-      //   const user = JSON.parse(userString);
-      //   user.gender = userData.gender;
-      //   localStorage.setItem("data", JSON.stringify(user));
-      //   router.push(pathname + "?" + createQueryString("step", "password"));
-      // }
+
       // Setting the password value
       if (step === "password") {
         const user = JSON.parse(userString);
@@ -94,25 +80,15 @@ const Home: React.FC = () => {
     }
   };
 
-  const setProgress = () => {
-    if (!step) return 0;
-    else if (step === "age") return 25;
-    else if (step === "email") return 50;
-    else if (step === "gender") return 75;
-    return 100;
-  };
-
   return (
     <main className="flex flex-col gap-12 items-center justify-center mt-16">
       {/* Progress bar */}
-
       <input
         type="range"
-        value={setProgress()}
+        value={setProgress(step)}
         readOnly
         placeholder="Form Progress"
       />
-
       {/* Name */}
       {!step && (
         <div className="flex flex-col items-center justify-center gap-6">
