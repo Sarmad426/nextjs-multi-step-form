@@ -1,5 +1,8 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { setProgress, User } from "@/utils/helper-methods";
 import {
@@ -8,7 +11,16 @@ import {
   usePathname,
   redirect,
 } from "next/navigation";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Home: React.FC = () => {
   const [userData, setUserData] = useState(User);
@@ -79,12 +91,12 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleGender = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleGender = (e: string) => {
     const userString = localStorage.getItem("data");
     if (userString) {
       const user = JSON.parse(userString);
-      setUserData({ ...userData, gender: e.target.value });
-      user.gender = e.target?.value;
+      setUserData({ ...userData, gender: e });
+      user.gender = e;
       localStorage.setItem("data", JSON.stringify(user));
       router.push(pathname + "?" + createQueryString("step", "password"));
     }
@@ -99,53 +111,39 @@ const Home: React.FC = () => {
       {/* Name */}
       {!step && (
         <div className="flex flex-col items-center justify-center gap-6">
-          <input
+          <Input
             type="text"
             placeholder="Enter your name..."
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            className="w-[20rem]"
             minLength={3}
             maxLength={20}
             value={userData.name}
             onChange={(e) => setUserData({ ...userData, name: e.target.value })}
           />
+
           {userData.name.length > 0 && (
-            <div className="flex gap-6">
-              <button
-                onClick={handleInputData}
-                className="bg-white text-black rounded-md p-2 cursor-pointer"
-              >
-                Continue
-              </button>
-            </div>
+            <Button onClick={handleInputData}>Continue</Button>
           )}
         </div>
       )}
       {/* Age */}
       {step === "age" && (
         <div className="flex flex-col items-center justify-center gap-6">
-          <input
+          <Input
             type="number"
             placeholder="Enter your age..."
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            className="w-[20rem]"
             value={userData.age}
             min={18}
             max={60}
             onChange={(e) => setUserData({ ...userData, age: +e.target.value })}
           />
           <div className="flex gap-6">
-            <button
-              className="bg-white text-black rounded-md px-2 py-1 cursor-pointer text-sm"
-              onClick={() => router.back()}
-            >
+            <Button onClick={() => router.back()} variant="secondary">
               Back
-            </button>
+            </Button>
             {userData.age >= 18 && (
-              <button
-                onClick={handleInputData}
-                className="bg-white text-black rounded-md p-2 cursor-pointer"
-              >
-                Continue
-              </button>
+              <Button onClick={handleInputData}>Continue</Button>
             )}
           </div>
         </div>
@@ -153,29 +151,21 @@ const Home: React.FC = () => {
       {/* Email */}
       {step === "email" && (
         <div className="flex flex-col items-center justify-center gap-6">
-          <input
+          <Input
             type="email"
             placeholder="Enter your email..."
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            className="w-[20rem]"
             value={userData.email}
             onChange={(e) =>
               setUserData({ ...userData, email: e.target.value })
             }
           />
           <div className="flex gap-6">
-            <button
-              className="bg-white text-black rounded-md px-2 py-1 cursor-pointer text-sm"
-              onClick={() => router.back()}
-            >
+            <Button variant="secondary" onClick={() => router.back()}>
               Back
-            </button>
+            </Button>
             {userData.email && (
-              <button
-                onClick={handleInputData}
-                className="bg-white text-black rounded-md p-2 cursor-pointer"
-              >
-                Continue
-              </button>
+              <Button onClick={handleInputData}>Continue</Button>
             )}
           </div>
         </div>
@@ -183,48 +173,42 @@ const Home: React.FC = () => {
       {/* Gender */}
       {step === "gender" && (
         <div className="flex flex-col items-center justify-center gap-6">
-          <select
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
-            title="Gender"
-            onChange={(e) => handleGender(e)}
+          <Select
+            onValueChange={(e) => handleGender(e)}
             value={userData.gender}
           >
-            <option value="" className="bg-gray-900">
-              Select Gender
-            </option>
-            <option value="Male" className="bg-gray-900">
-              Male
-            </option>
-            <option value="Female" className="bg-gray-900">
-              Female
-            </option>
-          </select>
-          <div className="flex gap-6">
-            <button
-              className="bg-white text-black rounded-md px-2 py-1 cursor-pointer text-sm"
-              onClick={() => router.back()}
-            >
-              Back
-            </button>
-          </div>
+            <SelectTrigger className="w-[20rem]">
+              <SelectValue placeholder="Select gender" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Gender</SelectLabel>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Button variant="secondary" onClick={() => router.back()}>
+            Back
+          </Button>
         </div>
       )}
       {/* Password */}
       {step === "password" && (
         <div className="flex flex-col items-center justify-center gap-6">
-          <input
+          <Input
             type="password"
             placeholder="Create a password..."
-            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+            className="w-[20rem]"
             value={userData.password}
             onChange={(e) =>
               setUserData({ ...userData, password: e.target.value })
             }
           />
-          <input
+          <Input
             type="password"
             placeholder="Confirm new password..."
-            className={`p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem] outline-none ${
+            className={`w-[20rem] outline-none ${
               userData.password === password2
                 ? "border-green-500"
                 : "border-red-500"
@@ -233,20 +217,12 @@ const Home: React.FC = () => {
             onChange={(e) => setPassword2(e.target.value)}
           />
           <div className="flex gap-6">
-            <button
-              className="bg-white text-black rounded-md px-2 py-1 cursor-pointer text-sm"
-              onClick={() => router.back()}
-            >
+            <Button variant="secondary" onClick={() => router.back()}>
               Back
-            </button>
+            </Button>
             {userData.password.length > 0 &&
               userData.password === password2 && (
-                <button
-                  onClick={handleInputData}
-                  className="bg-white text-black rounded-md p-2 cursor-pointer"
-                >
-                  Create Account
-                </button>
+                <Button onClick={handleInputData}>Create Account</Button>
               )}
           </div>
         </div>
