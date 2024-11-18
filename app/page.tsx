@@ -238,7 +238,7 @@ const Home: React.FC = () => {
                   onClick={handleInputData}
                   className="bg-white text-black rounded-md p-2 cursor-pointer"
                 >
-                  Continue
+                  Create Account
                 </button>
               )}
           </div>
