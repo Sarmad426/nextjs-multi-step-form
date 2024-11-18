@@ -6,6 +6,7 @@ import { auth } from "@/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { useAuth } from "@/components/context/AuthContext";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 function Login() {
   const { user } = useAuth();
@@ -54,12 +55,7 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
           />
-          <button
-            type="submit"
-            className="bg-white text-black rounded-md p-2 cursor-pointer"
-          >
-            Continue
-          </button>
+          <Button type="submit">Continue</Button>
         </form>
         {error && <p>{error}</p>}
       </div>

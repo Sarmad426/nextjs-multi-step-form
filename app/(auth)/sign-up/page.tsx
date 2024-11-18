@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebaseConfig"; // import initialized Firebase auth
 import { FirebaseError } from "firebase/app";
+import { Button } from "@/components/ui/button";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -54,12 +55,7 @@ function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
           className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
         />
-        <button
-          type="submit"
-          className="bg-white text-black rounded-md p-2 cursor-pointer"
-        >
-          Sign Up
-        </button>
+        <Button type="submit">Sign Up</Button>
       </form>
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-teal-500">{success}</p>}
