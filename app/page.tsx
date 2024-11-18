@@ -1,7 +1,12 @@
 "use client";
 
 import { setProgress, User } from "@/utils/helper-methods";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import {
+  useSearchParams,
+  useRouter,
+  usePathname,
+  redirect,
+} from "next/navigation";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 const Home: React.FC = () => {
@@ -15,6 +20,8 @@ const Home: React.FC = () => {
   }, []);
 
   const [password2, setPassword2] = useState<string>("");
+
+  const steps = ["name", "age", "email", "gender", "password"];
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -32,6 +39,9 @@ const Home: React.FC = () => {
 
   const step = searchParams.get("step");
 
+  if (step && !steps?.includes(step)) {
+    redirect("/");
+  }
   const handleInputData = () => {
     const userString = localStorage.getItem("data");
 
@@ -59,7 +69,6 @@ const Home: React.FC = () => {
         localStorage.setItem("data", JSON.stringify(user));
         router.push(pathname + "?" + createQueryString("step", "gender"));
       }
-
       // Setting the password value
       if (step === "password") {
         const user = JSON.parse(userString);
@@ -178,8 +187,8 @@ const Home: React.FC = () => {
         <div className="flex flex-col items-center justify-center gap-6">
           <select
             className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
-            onChange={(e) => handleGender(e)}
             title="Gender"
+            onChange={(e) => handleGender(e)}
             value={userData.gender}
           >
             <option value="" className="bg-gray-900">
