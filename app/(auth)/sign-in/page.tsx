@@ -5,9 +5,10 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { useAuth } from "@/components/context/AuthContext";
+import { redirect } from "next/navigation";
 
 function Login() {
-  const { user, logOut } = useAuth();
+  const { user } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,43 +26,43 @@ function Login() {
     }
   };
 
+  if (user) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="h-screen flex flex-col items-center justify-center">
-      {user?.email}
-      {user && (
-        <button
-          onClick={() => logOut()}
-          className="bg-white text-black rounded-md p-2 cursor-pointer"
+      <div>
+        <h2 className="my-12 lg:text-4xl md:text-3xl text-2xl font-semibold">
+          Login
+        </h2>
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col items-center gap-8"
         >
-          Logout
-        </button>
-      )}
-      <h2 className="my-12 lg:text-4xl md:text-3xl text-2xl font-semibold">
-        Login
-      </h2>
-      <form onSubmit={handleLogin} className="flex flex-col items-center gap-8">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
-        />
-        <button
-          type="submit"
-          className="bg-white text-black rounded-md p-2 cursor-pointer"
-        >
-          Continue
-        </button>
-      </form>
-      {error && <p>{error}</p>}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="p-2 rounded-md text-white bg-transparent border border-gray-700 w-[20rem]"
+          />
+          <button
+            type="submit"
+            className="bg-white text-black rounded-md p-2 cursor-pointer"
+          >
+            Continue
+          </button>
+        </form>
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 }
