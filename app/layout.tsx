@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { AuthProvider } from "@/components/context/AuthContext";
 import { ThemeProvider } from "next-themes";
+import { ModeToggle } from "@/components/theme-toggler";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,6 +39,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <ModeToggle />
             {children}
           </ThemeProvider>
         </AuthProvider>
