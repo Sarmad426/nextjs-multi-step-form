@@ -1,5 +1,6 @@
 "use client";
 
+import { Progress } from "@/components/ui/progress";
 import { setProgress, User } from "@/utils/helper-methods";
 import {
   useSearchParams,
@@ -92,12 +93,9 @@ const Home: React.FC = () => {
   return (
     <main className="flex flex-col gap-12 items-center justify-center mt-16">
       {/* Progress bar */}
-      <input
-        type="range"
-        value={setProgress(step)}
-        readOnly
-        placeholder="Form Progress"
-      />
+      <div className="w-[15rem]">
+        <Progress value={setProgress(step)} />
+      </div>
       {/* Name */}
       {!step && (
         <div className="flex flex-col items-center justify-center gap-6">
